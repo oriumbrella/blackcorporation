@@ -22,6 +22,7 @@ body {
   min-height: 100vh;
 }
 
+/* 左メニュー */
 .sidebar {
   width: 260px;
   background: #020202;
@@ -75,6 +76,7 @@ body {
   font-weight: bold;
 }
 
+/* メイン */
 .main {
   flex: 1;
   background: linear-gradient(135deg, #151515, #090909);
@@ -113,65 +115,33 @@ h1 {
 
 .desc {
   color: #aaa;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
-.form-box {
-  border: 1px solid #333;
-  background: rgba(255,255,255,0.03);
-}
-
-.row {
+/* 人事ポータル */
+.hr-grid {
   display: grid;
-  grid-template-columns: 220px 1fr;
-  border-bottom: 1px solid #333;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 18px;
+  max-width: 980px;
 }
 
-.row:last-child {
-  border-bottom: none;
+.hr-card {
+  border: 1px solid #333;
+  background: rgba(255,255,255,0.035);
+  padding: 22px;
+  min-height: 150px;
 }
 
-.label {
-  padding: 16px 22px;
-  color: #ccc;
-  border-right: 1px solid #333;
+.hr-card h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
 }
 
-.field {
-  padding: 12px;
-}
-
-input, select, textarea {
-  width: 100%;
-  background: #111;
-  border: 1px solid #444;
-  color: #eee;
-  padding: 12px;
-  font-size: 15px;
-  border-radius: 4px;
-}
-
-textarea {
-  height: 220px;
-  resize: none;
+.hr-card p {
+  color: #aaa;
   line-height: 1.7;
-}
-
-.required {
-  display: inline-block;
-  background: #5b1111;
-  color: #fff;
-  font-size: 12px;
-  padding: 2px 6px;
-  margin-left: 8px;
-  border-radius: 3px;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  padding: 28px;
+  font-size: 14px;
 }
 
 button, .x-button {
@@ -193,19 +163,13 @@ button:hover, .x-button:hover {
   background: #333;
 }
 
-.send {
+.danger {
   background: #6b1515;
   border-color: #8a2525;
 }
 
-.send:hover {
+.danger:hover {
   background: #8a1c1c;
-}
-
-.send:disabled {
-  background: #333;
-  color: #777;
-  cursor: not-allowed;
 }
 
 /* チャット画面 */
@@ -253,49 +217,49 @@ button:hover, .x-button:hover {
   margin-bottom: 8px;
 }
 
-.x-button {
-  background: #111;
-  border-color: #555;
-}
-
-.x-button:hover {
-  background: #1d1d1d;
-}
-
-/* ロック画面 */
-.lock {
+/* ポップアップ */
+.popup-bg {
+  display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.86);
-  display: flex;
+  background: rgba(0,0,0,0.75);
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 20;
 }
 
-.lock-box {
-  width: 360px;
+.popup {
+  width: 420px;
   background: #111;
-  border: 1px solid #444;
+  border: 1px solid #555;
   padding: 28px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.9);
   text-align: center;
-  box-shadow: 0 0 40px rgba(0,0,0,0.8);
 }
 
-.lock-box h2 {
+.popup h2 {
   margin-top: 0;
 }
 
-.lock-box p {
-  color: #aaa;
-  font-size: 14px;
+.popup p {
+  color: #ccc;
+  line-height: 1.7;
+}
+
+.popup input {
+  width: 100%;
+  background: #050505;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 12px;
+  margin: 12px 0;
+  font-size: 16px;
 }
 
 .error {
   color: #ff7777;
+  height: 24px;
   font-size: 14px;
-  height: 22px;
-  margin-top: 10px;
 }
 
 @media (max-width: 800px) {
@@ -307,17 +271,8 @@ button:hover, .x-button:hover {
     width: 100%;
   }
 
-  .row {
+  .hr-grid {
     grid-template-columns: 1fr;
-  }
-
-  .label {
-    border-right: none;
-    border-bottom: 1px solid #333;
-  }
-
-  .buttons {
-    flex-direction: column;
   }
 
   button, .x-button {
@@ -337,7 +292,7 @@ button:hover, .x-button:hover {
 
     <div class="menu-item active">ホーム</div>
     <div class="menu-item">勤怠</div>
-    <div class="menu-item">総務</div>
+    <div class="menu-item">給与</div>
     <div class="menu-item">人事部</div>
     <div class="menu-item">申請</div>
     <div class="menu-item">社内連絡</div>
@@ -347,7 +302,7 @@ button:hover, .x-button:hover {
       <div class="notice-title">お知らせ</div>
       <p>2024/05/20　システムメンテナンスのお知らせ</p>
       <p>2024/05/15　健康診断のご案内</p>
-      <p>2024/05/10　社内規程 改定のお知らせ</p>
+      <p>2024/05/10　人事規程 改定のお知らせ</p>
     </div>
   </aside>
 
@@ -362,76 +317,51 @@ button:hover, .x-button:hover {
 
     <div class="content">
 
-      <!-- フォーム画面 -->
-      <section id="formScreen">
-        <div class="breadcrumb">ホーム ＞ 申請 ＞ 人事部退職届送信</div>
+      <!-- 人事ポータル画面 -->
+      <section id="hrScreen">
+        <div class="breadcrumb">ホーム ＞ 人事部ポータル</div>
 
-        <h1>人事部 退職届送信フォーム</h1>
-        <div class="desc">以下のフォームに必要事項を入力のうえ、送信してください。</div>
+        <h1>人事部ポータル</h1>
+        <div class="desc">各種人事手続きはこちらから申請してください。</div>
 
-        <div class="form-box">
-          <div class="row">
-            <div class="label">社員番号</div>
-            <div class="field"><input value="KOKU-10023"></div>
+        <div class="hr-grid">
+
+          <div class="hr-card">
+            <h2>勤怠修正申請</h2>
+            <p>打刻漏れ、勤務時間の修正、休憩時間の変更を申請できます。</p>
+            <button>申請する</button>
           </div>
 
-          <div class="row">
-            <div class="label">氏名</div>
-            <div class="field"><input value="黒々 太郎"></div>
+          <div class="hr-card">
+            <h2>有給休暇申請</h2>
+            <p>年次有給休暇、半休、時間休の取得申請を行えます。</p>
+            <button>申請する</button>
           </div>
 
-          <div class="row">
-            <div class="label">所属部署</div>
-            <div class="field">
-              <select>
-                <option>営業本部　第一営業部</option>
-                <option>総務部</option>
-                <option>人事部</option>
-              </select>
-            </div>
+          <div class="hr-card">
+            <h2>給与明細確認</h2>
+            <p>過去の給与明細、賞与明細、控除項目を確認できます。</p>
+            <button>確認する</button>
           </div>
 
-          <div class="row">
-            <div class="label">退職希望日 <span class="required">必須</span></div>
-            <div class="field"><input type="date" value="2024-06-30"></div>
+          <div class="hr-card">
+            <h2>住所・扶養情報変更</h2>
+            <p>住所、緊急連絡先、扶養家族情報の変更申請を行えます。</p>
+            <button>変更する</button>
           </div>
 
-          <div class="row">
-            <div class="label">件名 <span class="required">必須</span></div>
-            <div class="field"><input value="退職届の提出について"></div>
+          <div class="hr-card">
+            <h2>異動・評価情報</h2>
+            <p>所属部署、評価期間、面談記録などを確認できます。</p>
+            <button>確認する</button>
           </div>
 
-          <div class="row">
-            <div class="label">送信先 <span class="required">必須</span></div>
-            <div class="field">
-              <select>
-                <option>人事部退職処理窓口（送信先：人事部）</option>
-              </select>
-            </div>
+          <div class="hr-card">
+            <h2>退職手続き</h2>
+            <p>退職届の提出、退職希望日の登録、貸与物返却確認を行います。</p>
+            <button class="danger" onclick="showSelect()">退職手続きへ</button>
           </div>
 
-          <div class="row">
-            <div class="label">本文 <span class="required">必須</span></div>
-            <div class="field">
-<textarea>株式会社黒々
-人事部退職処理窓口 ご担当者様
-
-私儀、
-このたび一身上の都合により、誠に勝手ながら退職させていただきたく、
-ここに退職届を提出いたします。
-
-在職中は格別のご指導ご鞭撻を賜り、厚く御礼申し上げます。
-つきましては、退職手続きのご対応を何卒よろしくお願い申し上げます。
-
-以上、取り急ぎ退職の意向をお伝えいたします。</textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="buttons">
-          <button>下書き保存</button>
-          <button>内容確認</button>
-          <button class="send" id="sendBtn" disabled>送信</button>
         </div>
       </section>
 
@@ -468,41 +398,73 @@ button:hover, .x-button:hover {
   </main>
 </div>
 
-<!-- ロック画面 -->
-<div class="lock" id="lockScreen">
-  <div class="lock-box">
-    <h2>退職届送信フォームはロックされています</h2>
-    <p>送信機能を有効にするには、解除コードを入力してください。</p>
+<!-- ポップアップ -->
+<div class="popup-bg" id="popupBg">
+
+  <!-- 要件選択 -->
+  <div class="popup" id="selectPopup">
+    <h2>要件を選んでください</h2>
+    <p>人事部への申請内容を選択してください。</p>
+
+    <button onclick="showLock()">退職</button>
+    <button onclick="closePopup()">閉じる</button>
+  </div>
+
+  <!-- ロック画面 -->
+  <div class="popup" id="lockPopup" style="display:none;">
+    <h2>ロックされています</h2>
+    <p>
+      退職手続きは現在ロックされています。<br>
+      解除コードを入力してください。
+    </p>
 
     <input id="codeInput" type="password" placeholder="解除コード">
-    <button onclick="unlock()">解除</button>
+
+    <button class="danger" onclick="unlock()">解除して進む</button>
+    <button onclick="closePopup()">閉じる</button>
 
     <div class="error" id="errorText"></div>
   </div>
+
 </div>
 
 <script>
-const sendBtn = document.getElementById("sendBtn");
-const lockScreen = document.getElementById("lockScreen");
+const popupBg = document.getElementById("popupBg");
+const selectPopup = document.getElementById("selectPopup");
+const lockPopup = document.getElementById("lockPopup");
 const errorText = document.getElementById("errorText");
-const formScreen = document.getElementById("formScreen");
+const hrScreen = document.getElementById("hrScreen");
 const chatScreen = document.getElementById("chatScreen");
+
+function showSelect() {
+  popupBg.style.display = "flex";
+  selectPopup.style.display = "block";
+  lockPopup.style.display = "none";
+  errorText.textContent = "";
+}
+
+function showLock() {
+  selectPopup.style.display = "none";
+  lockPopup.style.display = "block";
+}
+
+function closePopup() {
+  popupBg.style.display = "none";
+  errorText.textContent = "";
+  document.getElementById("codeInput").value = "";
+}
 
 function unlock() {
   const code = document.getElementById("codeInput").value;
 
   if (code === "1234") {
-    lockScreen.style.display = "none";
-    sendBtn.disabled = false;
+    popupBg.style.display = "none";
+    hrScreen.style.display = "none";
+    chatScreen.style.display = "block";
   } else {
     errorText.textContent = "解除コードが一致しません。";
   }
 }
-
-sendBtn.addEventListener("click", function() {
-  formScreen.style.display = "none";
-  chatScreen.style.display = "block";
-});
 </script>
 
 </body>
