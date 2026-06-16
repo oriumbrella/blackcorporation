@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>株式会社黒々 社内ポータル</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Arial, sans-serif;
+  background: #050505;
+  color: #eee;
+}
+
+.portal {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: #020202;
+  border-right: 1px solid #222;
+  padding: 28px 18px;
+}
+
+.logo {
+  font-size: 42px;
+  font-weight: bold;
+  letter-spacing: 8px;
+  margin-bottom: 8px;
+}
+
+.company {
+  font-size: 20px;
+  margin-bottom: 34px;
+  color: #ddd;
+}
+
+.menu-item {
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  color: #ccc;
+  cursor: default;
+  transition: 0.2s;
+}
+
+.menu-item:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.menu-item.active {
+  background: #333;
+  color: #fff;
+}
+
+.notice {
+  margin-top: 40px;
+  border: 1px solid #333;
+  padding: 16px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.notice-title {
+  color: #fff;
+  margin-bottom: 14px;
+  font-weight: bold;
+}
+
+.main {
+  flex: 1;
+  background: linear-gradient(135deg, #151515, #090909);
+}
+
+.header {
+  height: 64px;
+  border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 34px;
+  background: #080808;
+}
+
+.user {
+  text-align: right;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.content {
+  padding: 36px;
+}
+
+.breadcrumb {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+}
+
+.desc {
+  color: #aaa;
+  margin-bottom: 24px;
+}
+
+.form-box {
+  border: 1px solid #333;
+  background: rgba(255,255,255,0.03);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  border-bottom: 1px solid #333;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  padding: 16px 22px;
+  color: #ccc;
+  border-right: 1px solid #333;
+}
+
+.field {
+  padding: 12px;
+}
+
+input, select, textarea {
+  width: 100%;
+  background: #111;
+  border: 1px solid #444;
+  color: #eee;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 4px;
+}
+
+textarea {
+  height: 220px;
+  resize: none;
+  line-height: 1.7;
+}
+
+.required {
+  display: inline-block;
+  background: #5b1111;
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 6px;
+  margin-left: 8px;
+  border-radius: 3px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 28px;
+}
+
+button, .x-button {
+  min-width: 180px;
+  padding: 14px 20px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #222;
+  color: #eee;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+}
+
+button:hover, .x-button:hover {
+  background: #333;
+}
+
+.send {
+  background: #6b1515;
+  border-color: #8a2525;
+}
+
+.send:hover {
+  background: #8a1c1c;
+}
+
+.send:disabled {
+  background: #333;
+  color: #777;
+  cursor: not-allowed;
+}
+
+/* チャット画面 */
+.chat-screen {
+  display: none;
+}
+
+.chat-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.chat-tab {
+  padding: 12px 18px;
+  background: #111;
+  border: 1px solid #333;
+  color: #888;
+}
+
+.chat-tab.active {
+  color: #fff;
+  border-color: #666;
+  background: #222;
+}
+
+.chat-box {
+  max-width: 760px;
+  border: 1px solid #333;
+  background: rgba(255,255,255,0.03);
+  padding: 24px;
+}
+
+.message {
+  background: #111;
+  border: 1px solid #333;
+  padding: 18px;
+  margin-bottom: 18px;
+  line-height: 1.8;
+}
+
+.sender {
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.x-button {
+  background: #111;
+  border-color: #555;
+}
+
+.x-button:hover {
+  background: #1d1d1d;
+}
+
+/* ロック画面 */
+.lock {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.86);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.lock-box {
+  width: 360px;
+  background: #111;
+  border: 1px solid #444;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(0,0,0,0.8);
+}
+
+.lock-box h2 {
+  margin-top: 0;
+}
+
+.lock-box p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.error {
+  color: #ff7777;
+  font-size: 14px;
+  height: 22px;
+  margin-top: 10px;
+}
+
+@media (max-width: 800px) {
+  .portal {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .label {
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  button, .x-button {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="portal">
+
+  <aside class="sidebar">
+    <div class="logo">黒々</div>
+    <div class="company">株式会社黒々</div>
+
+    <div class="menu-item active">ホーム</div>
+    <div class="menu-item">勤怠</div>
+    <div class="menu-item">総務</div>
+    <div class="menu-item">人事部</div>
+    <div class="menu-item">申請</div>
+    <div class="menu-item">社内連絡</div>
+    <div class="menu-item">設定</div>
+
+    <div class="notice">
+      <div class="notice-title">お知らせ</div>
+      <p>2024/05/20　システムメンテナンスのお知らせ</p>
+      <p>2024/05/15　健康診断のご案内</p>
+      <p>2024/05/10　社内規程 改定のお知らせ</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div>株式会社黒々　社内ポータル</div>
+      <div class="user">
+        黒々 太郎<br>
+        社員番号：KOKU-10023
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- フォーム画面 -->
+      <section id="formScreen">
+        <div class="breadcrumb">ホーム ＞ 申請 ＞ 人事部退職届送信</div>
+
+        <h1>人事部 退職届送信フォーム</h1>
+        <div class="desc">以下のフォームに必要事項を入力のうえ、送信してください。</div>
+
+        <div class="form-box">
+          <div class="row">
+            <div class="label">社員番号</div>
+            <div class="field"><input value="KOKU-10023"></div>
+          </div>
+
+          <div class="row">
+            <div class="label">氏名</div>
+            <div class="field"><input value="黒々 太郎"></div>
+          </div>
+
+          <div class="row">
+            <div class="label">所属部署</div>
+            <div class="field">
+              <select>
+                <option>営業本部　第一営業部</option>
+                <option>総務部</option>
+                <option>人事部</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="label">退職希望日 <span class="required">必須</span></div>
+            <div class="field"><input type="date" value="2024-06-30"></div>
+          </div>
+
+          <div class="row">
+            <div class="label">件名 <span class="required">必須</span></div>
+            <div class="field"><input value="退職届の提出について"></div>
+          </div>
+
+          <div class="row">
+            <div class="label">送信先 <span class="required">必須</span></div>
+            <div class="field">
+              <select>
+                <option>人事部退職処理窓口（送信先：人事部）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="label">本文 <span class="required">必須</span></div>
+            <div class="field">
+<textarea>株式会社黒々
+人事部退職処理窓口 ご担当者様
+
+私儀、
+このたび一身上の都合により、誠に勝手ながら退職させていただきたく、
+ここに退職届を提出いたします。
+
+在職中は格別のご指導ご鞭撻を賜り、厚く御礼申し上げます。
+つきましては、退職手続きのご対応を何卒よろしくお願い申し上げます。
+
+以上、取り急ぎ退職の意向をお伝えいたします。</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button>下書き保存</button>
+          <button>内容確認</button>
+          <button class="send" id="sendBtn" disabled>送信</button>
+        </div>
+      </section>
+
+      <!-- チャット画面 -->
+      <section class="chat-screen" id="chatScreen">
+        <div class="breadcrumb">ホーム ＞ 社内連絡 ＞ チャット</div>
+
+        <div class="chat-tabs">
+          <div class="chat-tab">通知</div>
+          <div class="chat-tab active">チャット</div>
+          <div class="chat-tab">送信履歴</div>
+        </div>
+
+        <h1>社内チャット</h1>
+        <div class="desc">人事部退職処理窓口</div>
+
+        <div class="chat-box">
+          <div class="message">
+            <div class="sender">人事部退職処理窓口</div>
+            ありがとう。
+          </div>
+
+          <a
+            class="x-button"
+            target="_blank"
+            href="https://twitter.com/intent/tweet?text=%E4%BA%BA%E4%BA%8B%E9%83%A8%E3%81%8B%E3%82%89%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%EF%BC%9A%E4%BB%8A%E6%9C%88%E3%81%AE%E9%80%80%E8%81%B7%E8%80%85%E3%81%AF0%E4%BA%BA%E3%81%A7%E3%81%99"
+          >
+            Xで報告ポスト
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ロック画面 -->
+<div class="lock" id="lockScreen">
+  <div class="lock-box">
+    <h2>退職届送信フォームはロックされています</h2>
+    <p>送信機能を有効にするには、解除コードを入力してください。</p>
+
+    <input id="codeInput" type="password" placeholder="解除コード">
+    <button onclick="unlock()">解除</button>
+
+    <div class="error" id="errorText"></div>
+  </div>
+</div>
+
+<script>
+const sendBtn = document.getElementById("sendBtn");
+const lockScreen = document.getElementById("lockScreen");
+const errorText = document.getElementById("errorText");
+const formScreen = document.getElementById("formScreen");
+const chatScreen = document.getElementById("chatScreen");
+
+function unlock() {
+  const code = document.getElementById("codeInput").value;
+
+  if (code === "1234") {
+    lockScreen.style.display = "none";
+    sendBtn.disabled = false;
+  } else {
+    errorText.textContent = "解除コードが一致しません。";
+  }
+}
+
+sendBtn.addEventListener("click", function() {
+  formScreen.style.display = "none";
+  chatScreen.style.display = "block";
+});
+</script>
+
+</body>
+</html>
